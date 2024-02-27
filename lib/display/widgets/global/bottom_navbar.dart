@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:qride_app/display/screens/home/home.dart';
 import 'package:qride_app/display/screens/map/map_ride.dart';
 import 'package:qride_app/display/screens/qr_scan/qr_scan.dart';
+import 'package:qride_app/display/widgets/global/drawer.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -41,6 +43,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
           style: const TextStyle(color: Colors.white),
         ),
       ),
+      endDrawer: const AppDrawer(),
       body: pages[pagenumber],
       bottomNavigationBar: Stack(
         children: [
