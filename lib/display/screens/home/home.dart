@@ -4,7 +4,8 @@ import 'package:qride_app/display/widgets/global/search_place.dart';
 import 'package:qride_app/display/widgets/home/place_card.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final Function(Widget) onPlaceSelected;
+  const Home({super.key, required this.onPlaceSelected});
 
   @override
   Widget build(BuildContext context) {

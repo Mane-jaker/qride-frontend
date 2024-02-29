@@ -1,8 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:qride_app/display/screens/welcome/welcome.dart';
+import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Espera a que FlutterFire se inicialice
   runApp(const MyApp());
 }
 
@@ -27,7 +31,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      home: const Welcome(),
+      home: const AppScaffold(),
     );
   }
 }

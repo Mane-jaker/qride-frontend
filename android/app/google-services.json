@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "235604589364",
+    "project_id": "qride-ccb57",
+    "storage_bucket": "qride-ccb57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235604589364:android:3a292818a9138d30e60361",
+        "android_client_info": {
+          "package_name": "com.example.qride_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0SYhLJP_Gdmjv6YU_6WSvAF9JKa8XTG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
