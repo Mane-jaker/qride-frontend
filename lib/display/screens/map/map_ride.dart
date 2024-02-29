@@ -31,7 +31,7 @@ class _MapRideState extends State<MapRide> {
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(
               decoration: const BoxDecoration(
-                color: Colors.black,
+                color: Color.fromARGB(255, 28, 28, 28),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
