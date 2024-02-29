@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/screens/main/log_in.dart';
 import 'package:qride_app/display/screens/main/main.dart';
+import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -73,7 +75,7 @@ class _WelcomeState extends State<Welcome> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const MainScreen()),
+                              builder: (context) => const AppScaffold()),
                         );
                       }
                     },

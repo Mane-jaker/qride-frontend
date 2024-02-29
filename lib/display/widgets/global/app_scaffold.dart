@@ -14,20 +14,53 @@ class AppScaffold extends StatefulWidget {
 
 class _AppScaffoldState extends State<AppScaffold> {
   int _currentPageIndex = 0;
-
-  late Widget _currentPage;
+  late Scaffold _scaffold;
 
   @override
   void initState() {
     super.initState();
-    _currentPage = _buildPage(_currentPageIndex);
+    _scaffold = _buildScaffold(true);
   }
 
   void _updatePageIndex(int index) {
     setState(() {
       _currentPageIndex = index;
-      _currentPage = _buildPage(_currentPageIndex);
+      _scaffold = _buildScaffold(true);
     });
+  }
+
+  void _changeBodyToPage(Widget page) {
+    setState(() {
+      _scaffold = _buildScaffold(false, body: page);
+    });
+  }
+
+  Scaffold _buildScaffold(bool showEndDrawer, {Widget? body}) {
+    List<String> pageTitles = [
+      'Home',
+      'Qr',
+      'Map',
+    ];
+
+    return Scaffold(
+      extendBodyBehindAppBar: !showEndDrawer,
+      appBar: AppBar(
+        centerTitle: true,
+        title: showEndDrawer
+            ? Text(
+                pageTitles[_currentPageIndex],
+                style: const TextStyle(color: Colors.white),
+              )
+            : null,
+        backgroundColor: Colors.transparent,
+      ),
+      endDrawer: showEndDrawer ? const AppDrawer() : null,
+      body: body ?? _buildPage(_currentPageIndex),
+      bottomNavigationBar: BottomNavbar(
+        currentIndex: _currentPageIndex,
+        onTap: _updatePageIndex,
+      ),
+    );
   }
 
   Widget _buildPage(int index) {
@@ -43,34 +76,8 @@ class _AppScaffoldState extends State<AppScaffold> {
     }
   }
 
-  void _changeBodyToPage(Widget page) {
-    setState(() {
-      _currentPage = page;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<String> pageTitles = [
-      'Home',
-      'Qr',
-      'Map',
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          pageTitles[_currentPageIndex],
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-      endDrawer: const AppDrawer(),
-      body: _currentPage,
-      bottomNavigationBar: BottomNavbar(
-        currentIndex: _currentPageIndex,
-        onTap: _updatePageIndex,
-      ),
-    );
+    return _scaffold;
   }
 }
