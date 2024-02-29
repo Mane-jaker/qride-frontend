@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/screens/main/main.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({Key? key}) : super(key: key);
@@ -45,38 +46,43 @@ class _WelcomeState extends State<Welcome> {
           Padding(
             padding: const EdgeInsets.only(bottom: 48.0),
             child: Container(
-            alignment: Alignment.topCenter,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    if (_pageController.page!.toInt() > 0) {
-                      _pageController.previousPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    }
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_forward_ios),
-                  onPressed: () {
-                    if (_pageController.page!.toInt() < _slides.length - 1) {
-                      _pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    } else {
-                      // Navigator.push
-                    }
-                  },
-                ),
-              ],
+              alignment: Alignment.topCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      if (_pageController.page!.toInt() > 0) {
+                        _pageController.previousPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios),
+                    onPressed: () {
+                      if (_pageController.page!.toInt() < _slides.length - 1) {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainScreen()),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-      )],
+          )
+        ],
       ),
     );
   }
@@ -97,7 +103,8 @@ class OnboardingSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left:24.0, right: 24.0, top: 56.0, bottom: 0),
+      padding:
+          const EdgeInsets.only(left: 24.0, right: 24.0, top: 56.0, bottom: 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,

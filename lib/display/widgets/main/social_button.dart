@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
 
 class SocialButton extends StatelessWidget {
   final String title;
@@ -28,7 +29,13 @@ class SocialButton extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const BottomNavbar()),
+                  );
+                },
                 icon: icon,
                 iconSize: 24,
               ),
