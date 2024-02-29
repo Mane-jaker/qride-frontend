@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
 
 class SocialButton extends StatelessWidget {
@@ -33,7 +34,7 @@ class SocialButton extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const BottomNavbar()),
+                        builder: (context) => const AppScaffold()),
                   );
                 },
                 icon: icon,

@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:qride_app/display/screens/welcome/welcome.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
-import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
