@@ -17,7 +17,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
       children: [
         Positioned(
           // Posiciona el círculo de resaltado en la posición del ítem seleccionado
-          bottom: MediaQuery.of(context).padding.bottom,
+          bottom: 5,
           left: MediaQuery.of(context).size.width *
               widget.currentIndex /
               3, // Divide la pantalla en 3 partes iguales para obtener la posición correcta

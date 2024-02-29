@@ -37,7 +37,7 @@ class _AppScaffoldState extends State<AppScaffold> {
 
   Scaffold _buildScaffold(bool showEndDrawer, {Widget? body}) {
     List<String> pageTitles = [
-      'Home',
+      'Qride',
       'Qr',
       'Map',
     ];
@@ -45,7 +45,6 @@ class _AppScaffoldState extends State<AppScaffold> {
     return Scaffold(
       extendBodyBehindAppBar: !showEndDrawer,
       appBar: AppBar(
-        centerTitle: true,
         title: showEndDrawer
             ? Text(
                 pageTitles[_currentPageIndex],

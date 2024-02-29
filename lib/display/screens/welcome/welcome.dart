@@ -75,7 +75,7 @@ class _WelcomeState extends State<Welcome> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AppScaffold()),
+                              builder: (context) => const MainScreen()),
                         );
                       }
                     },
