@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/screens/main/main.dart';
 import 'package:qride_app/display/screens/welcome/welcome.dart';
 import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
 
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      home: const Welcome(),
+      home: const MainScreen(),
     );
   }
 }
