@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,38 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyARKE04L8HNHQE1EdmECNS8qpTsr7StEAk',
-    appId: '1:235604589364:web:98eaed189f69186ae60361',
-    messagingSenderId: '235604589364',
-    projectId: 'qride-ccb57',
-    authDomain: 'qride-ccb57.firebaseapp.com',
-    storageBucket: 'qride-ccb57.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC0SYhLJP_Gdmjv6YU_6WSvAF9JKa8XTG8',
-    appId: '1:235604589364:android:3a292818a9138d30e60361',
-    messagingSenderId: '235604589364',
-    projectId: 'qride-ccb57',
-    storageBucket: 'qride-ccb57.appspot.com',
+    apiKey: 'AIzaSyC-XkbRFtDD3vHT9l9L3-LNmhgjQVP4r1s',
+    appId: '1:69175314150:android:0c47caf8d97bcb6ee29d27',
+    messagingSenderId: '69175314150',
+    projectId: 'qride-22a76',
+    storageBucket: 'qride-22a76.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC6uP6qkkrUICSxBqeRazHIRfYt3-yqf54',
-    appId: '1:235604589364:ios:75233b73e1ed2a14e60361',
-    messagingSenderId: '235604589364',
-    projectId: 'qride-ccb57',
-    storageBucket: 'qride-ccb57.appspot.com',
+    apiKey: 'AIzaSyAF89pb92wSga9kccRKUCmxVy0UGvVoVCo',
+    appId: '1:69175314150:ios:7313ec6cb52ed2e5e29d27',
+    messagingSenderId: '69175314150',
+    projectId: 'qride-22a76',
+    storageBucket: 'qride-22a76.appspot.com',
     iosBundleId: 'com.example.qrideApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC6uP6qkkrUICSxBqeRazHIRfYt3-yqf54',
-    appId: '1:235604589364:ios:0b62c24fcc8b7509e60361',
-    messagingSenderId: '235604589364',
-    projectId: 'qride-ccb57',
-    storageBucket: 'qride-ccb57.appspot.com',
-    iosBundleId: 'com.example.qrideApp.RunnerTests',
   );
 }
