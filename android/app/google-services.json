@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "69175314150",
+    "project_id": "qride-22a76",
+    "storage_bucket": "qride-22a76.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69175314150:android:0c47caf8d97bcb6ee29d27",
+        "android_client_info": {
+          "package_name": "com.example.qride_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-XkbRFtDD3vHT9l9L3-LNmhgjQVP4r1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
