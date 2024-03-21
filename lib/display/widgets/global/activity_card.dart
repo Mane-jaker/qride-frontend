@@ -28,11 +28,11 @@ class ActivityCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (subtitle != null) ...[
-                      subtitle!,
-                        const SizedBox(
-                          height: 8,
-                        ),
+                    if (title != null) ...[
+                      title!,
+                      const SizedBox(
+                        height: 8,
+                      ),
                     ],
                     if (subtitle != null) ...[
                       subtitle!,
