@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qride_app/core/repositories/user_providers.dart';
+import 'package:qride_app/display/screens/settings/account_configuration.dart';
+import 'package:qride_app/display/screens/settings/activity_configuration.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -15,19 +19,32 @@ class _AppDrawerState extends State<AppDrawer> {
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: <Widget>[
-          const SizedBox(
+          SizedBox(
             height: 130,
             child: DrawerHeader(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Leonardo Toledo',
-                    style: TextStyle(
-                      fontSize: 25,
-                    ),
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final userAsyncValue = ref.watch(userProvider);
+                      return userAsyncValue.when(
+                        data: (userResponse) {
+                          // Aquí puedes usar userResponse para mostrar los datos del usuario
+                          return Text(
+                            userResponse.name,
+                            style: const TextStyle(
+                              fontSize: 25,
+                            ),
+                          );
+                        },
+                        loading: () => const CircularProgressIndicator(),
+                        error: (error, stackTrace) =>
+                            const Text("Error al obtener el usuario"),
+                      );
+                    },
                   ),
-                  Icon(
+                  const Icon(
                     Icons.person,
                     size: 30,
                   )
@@ -40,11 +57,15 @@ class _AppDrawerState extends State<AppDrawer> {
             title: const Text(
               'Configuracion de la cuenta',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AccountConfiguration()),
+              );
             },
           ),
           const Divider(),
@@ -70,7 +91,10 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
             leading: const Icon(Icons.history_rounded),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>  ActivityConfiguration()));
             },
           ),
           const Divider(),
