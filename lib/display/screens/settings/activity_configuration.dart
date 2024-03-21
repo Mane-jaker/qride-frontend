@@ -42,45 +42,65 @@ class _ActivityConfiguration extends State<ActivityConfiguration> {
               ),
             ),
           ),
-          ActivityCard(
-            title: Consumer(
-              builder: (context, ref, child) {
-                final historyAsyncValue = ref.watch(historyProvider);
-                return historyAsyncValue.when(
-                  data: (historyResponse) {
-                    return Text(
-                      historyResponse.origin.latitude,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white60,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el origen"),
-                );
-              },
-            ),
-            subtitle: Consumer(
-              builder: (context, ref, child) {
-                final historyAsyncValue = ref.watch(historyProvider);
-                return historyAsyncValue.when(
-                  data: (historyResponse) {
-                    return Text(
-                      historyResponse.destiny.latitude,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white60,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el destino"),
-                );
-              },
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              final historyAsyncValue = ref.watch(historyProvider);
+              return historyAsyncValue.when(
+                data: (historyResponse) {
+                  return Column(
+                    children: historyResponse.map((trip) {
+                      return ActivityCard(
+                        title: Row(
+                          children: [
+                            Text(
+                              'Origen ${trip.origin.latitude}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Text(
+                              trip.origin.longitude,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white60,
+                              ),
+                            ),
+                          ],
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Text(
+                              'Destino ${trip.destiny.latitude}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Text(
+                              trip.destiny.longitude,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white60,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+                loading: () => const CircularProgressIndicator(),
+                error: (error, stackTrace) =>
+                    const Text("Error al obtener el historial"),
+              );
+            },
           ),
         ],
       ),

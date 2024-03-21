@@ -40,18 +40,21 @@ class UserService {
   }
 
   // Método para obtener historial por su UUID
-  Future<Trip> historyByUUID(String uuid) async {
+  Future<List<Trip>> historyByUUID(String uuid) async {
     try {
       final response = await _apiClient.get("/history/user/$uuid");
 
       if (response.statusCode == 200) {
-        print(response);
-        return Trip.fromJson(response.data);
+        final List<dynamic> responseData = response.data['data'];
+        final List<Trip> trips =
+            responseData.map((tripData) => Trip.fromJson(tripData)).toList();
+        return trips;
       } else {
-        throw Exception('Error al obtener el usuario: ${response.statusCode}');
+        throw Exception(
+            'Error al obtener la historia del usuario: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Error al obtener el usuario: $e');
+      throw Exception('Error al obtener la historia del usuario: $e');
     }
   }
 }
