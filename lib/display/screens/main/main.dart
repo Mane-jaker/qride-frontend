@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/screens/register/register_page.dart';
 import 'package:qride_app/display/widgets/main/social_button.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +34,38 @@ class MainScreen extends StatelessWidget {
                 color: Color.fromRGBO(55, 74, 114, 1),
                 icon: Icon(Icons.facebook)),
             const SizedBox(height: 20),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     '¿No tienes una cuenta?',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Regístrate aquí',
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: Color.fromRGBO(31, 125, 221, 1),
-                      fontWeight: FontWeight.w600,
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const RegisterPage()),
+                      );
+                    },
+                    child: const Text(
+                      'Regístrate aquí',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color.fromRGBO(31, 125, 221, 1),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

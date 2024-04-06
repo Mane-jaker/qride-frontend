@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +11,7 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 100, bottom: 30),
+              padding: const EdgeInsets.only(top: 80),
               child: Image.asset(
                 'assets/img/qridelogo.png',
                 height: 280,
@@ -20,6 +19,27 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Nombre',
+                  labelStyle:
+                      TextStyle(color: Color.fromRGBO(236, 236, 236, 0.6)),
+                  suffixIcon: Icon(Icons.person,
+                      color: Color.fromRGBO(236, 236, 236, 0.6)),
+                  filled: true,
+                  fillColor: Color(0xFF2F2F2F),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 13, horizontal: 18),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: TextFormField(
@@ -97,13 +117,7 @@ class LoginPage extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AppScaffold()),
-                    );
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(6)),
@@ -111,7 +125,7 @@ class LoginPage extends StatelessWidget {
                     backgroundColor: const Color.fromRGBO(24, 101, 207, 1),
                   ),
                   child: const Text(
-                    'Iniciar sesión',
+                    'Registrarse',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,

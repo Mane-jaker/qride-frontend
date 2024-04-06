@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qride_app/display/widgets/global/app_scaffold.dart';
-import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
+import 'package:qride_app/display/screens/main/log_in.dart';
 
 class SocialButton extends StatelessWidget {
   final String title;
@@ -22,7 +21,7 @@ class SocialButton extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AppScaffold()),
+            MaterialPageRoute(builder: (context) => const LoginPage()),
           );
         },
         child: Card(
@@ -41,7 +40,7 @@ class SocialButton extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const AppScaffold()),
+                          builder: (context) => const LoginPage()),
                     );
                   },
                   icon: icon,
