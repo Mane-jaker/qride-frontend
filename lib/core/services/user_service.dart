@@ -1,6 +1,8 @@
 import 'package:qride_app/core/api_client.dart';
 import 'package:qride_app/core/models/login_request.dart';
 import 'package:qride_app/core/models/login_response.dart';
+import 'package:qride_app/core/models/sing_up_request.dart';
+import 'package:qride_app/core/models/sing_up_response.dart';
 import 'package:qride_app/core/models/trip.dart';
 import 'package:qride_app/core/models/user_response.dart';
 
@@ -20,6 +22,22 @@ class UserService {
       }
     } catch (e) {
       throw Exception('Error de autenticación: $e');
+    }
+  }
+
+  Future<SignUpResponse> register(SignUpRequest request) async {
+    try {
+      final response =
+          await _apiClient.post("/users/sign_up", data: request.toJson());
+
+      if (response.statusCode == 200) {
+        print(response);
+        return SignUpResponse.fromJson(response.data);
+      } else {
+        throw Exception('Error de registro: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error de registro: $e');
     }
   }
 

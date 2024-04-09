@@ -1,7 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/core/models/sing_up_request.dart';
+import 'package:qride_app/core/models/sing_up_response.dart';
+import 'package:qride_app/core/services/user_service.dart';
+import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final SignUpRequest _signUpRequest = SignUpRequest();
+  final UserService _userService = UserService();
+  ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_updateName);
+    _emailController.addListener(_updateEmail);
+    _passwordController.addListener(_updatePassword);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  _updateName() {
+    if (_nameController.text.isNotEmpty) {
+      _signUpRequest.name = _nameController.text;
+    } else {
+      throw Exception('El nombre no puede estar vacío');
+    }
+  }
+
+  _updateEmail() {
+    _signUpRequest.email = _emailController.text;
+  }
+
+  _updatePassword() {
+    _signUpRequest.password = _passwordController.text;
+  }
+
+  _register() async {
+    _isLoading.value = true;
+    try {
+      // Call the register method with _signUpRequest
+      SignUpResponse response = await _userService.register(_signUpRequest);
+      if (response.success) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AppScaffold(),
+          ),
+        );
+      }
+    } finally {
+      _isLoading.value = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +104,7 @@ class RegisterPage extends StatelessWidget {
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 13, horizontal: 18),
                 ),
+                controller: _nameController,
               ),
             ),
             const SizedBox(height: 20),
@@ -58,6 +126,7 @@ class RegisterPage extends StatelessWidget {
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 13, horizontal: 18),
                 ),
+                controller: _emailController,
               ),
             ),
             const SizedBox(height: 20),
@@ -80,6 +149,7 @@ class RegisterPage extends StatelessWidget {
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 13, horizontal: 18),
                 ),
+                controller: _passwordController,
               ),
             ),
             const SizedBox(height: 22),
@@ -114,24 +184,31 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6)),
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _isLoading,
+                builder: (context, isLoading, child) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : _register,
+                      style: ElevatedButton.styleFrom(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                        ),
+                        backgroundColor: const Color.fromRGBO(24, 101, 207, 1),
+                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Registrarse',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
                     ),
-                    backgroundColor: const Color.fromRGBO(24, 101, 207, 1),
-                  ),
-                  child: const Text(
-                    'Registrarse',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],

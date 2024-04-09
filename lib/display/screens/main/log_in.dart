@@ -1,8 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/core/models/login_request.dart';
+import 'package:qride_app/core/models/login_response.dart';
+import 'package:qride_app/core/services/user_service.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final LoginRequest _logInRequest = LoginRequest();
+  final UserService _userService = UserService();
+  ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(_updateEmail);
+    _passwordController.addListener(_updatePassword);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  _updateEmail() {
+    _logInRequest.email = _emailController.text;
+  }
+
+  _updatePassword() {
+    _logInRequest.password = _passwordController.text;
+  }
+
+  _register() async {
+    _isLoading.value = true;
+    try {
+      // Call the register method with _logInRequest
+      LoginResponse response = await _userService.authenticate(_logInRequest);
+      if (response.success) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const AppScaffold(),
+          ),
+        );
+      }
+    } finally {
+      _isLoading.value = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,30 +149,31 @@ class LoginPage extends StatelessWidget {
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AppScaffold()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6)),
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _isLoading,
+                builder: (context, isLoading, child) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : _register,
+                      style: ElevatedButton.styleFrom(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                        ),
+                        backgroundColor: const Color.fromRGBO(24, 101, 207, 1),
+                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              'Iniciar Sesion',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
                     ),
-                    backgroundColor: const Color.fromRGBO(24, 101, 207, 1),
-                  ),
-                  child: const Text(
-                    'Iniciar sesión',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],
