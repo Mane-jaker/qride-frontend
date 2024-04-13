@@ -43,4 +43,10 @@ class ApiClient {
   Future<Response> delete(String url, {Map<String, dynamic>? data}) async {
     return await _dio.delete(_baseUrl + url, data: data);
   }
+
+  Future<Response> postWithoutJwt(String url,
+      {Map<String, dynamic>? data}) async {
+    var options = Options(headers: {'Authorization': ''});
+    return await _dio.post(url, data: data, options: options);
+  }
 }

@@ -27,8 +27,10 @@ class UserService {
 
   Future<SignUpResponse> register(SignUpRequest request) async {
     try {
-      final response =
-          await _apiClient.post("/users/sign_up", data: request.toJson());
+      print(request.toJson());
+      final response = await _apiClient.postWithoutJwt(
+          "http://44.222.31.173:8080/api/v1/users/sing_up",
+          data: request.toJson());
 
       if (response.statusCode == 200) {
         print(response);
