@@ -94,7 +94,7 @@ class _AppDrawerState extends State<AppDrawer> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>  ActivityConfiguration()));
+                      builder: (context) =>  const ActivityConfiguration()));
             },
           ),
           const Divider(),

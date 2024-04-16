@@ -141,11 +141,24 @@ class _AccountConfiguration extends State<AccountConfiguration> {
                 fontSize: 18,
               ),
             ),
-            subtitle: const Text(
-              'Toledo',
-              style: TextStyle(
-                fontSize: 18,
-              ),
+            subtitle:  Consumer(
+              builder: (context, ref, child) {
+                final userAsyncValue = ref.watch(userProvider);
+                return userAsyncValue.when(
+                  data: (userResponse) {
+                    // Aquí puedes usar userResponse para mostrar los datos del usuario
+                    return Text(
+                      userResponse.lastname,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    );
+                  },
+                  loading: () => const CircularProgressIndicator(),
+                  error: (error, stackTrace) =>
+                      const Text("Error al obtener el usuario"),
+                );
+              },
             ),
             onTap: () {
               Navigator.pop(context);
