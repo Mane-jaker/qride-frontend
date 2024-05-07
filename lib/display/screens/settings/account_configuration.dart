@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qride_app/core/models/update_name_request.dart';
 import 'package:qride_app/core/repositories/user_providers.dart';
+import 'package:qride_app/core/services/user_service.dart';
 
 class AccountConfiguration extends StatefulWidget {
-  const AccountConfiguration({super.key});
+  const AccountConfiguration({Key? key}) : super(key: key);
 
   @override
-  State<AccountConfiguration> createState() => _AccountConfiguration();
+  State<AccountConfiguration> createState() => _AccountConfigurationState();
 }
 
-class _AccountConfiguration extends State<AccountConfiguration> {
+class _AccountConfigurationState extends State<AccountConfiguration> {
+  final UpdateNameRequest _updateNameRequest = UpdateNameRequest();
+  final UserService _userService = UserService();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -53,11 +58,13 @@ class _AccountConfiguration extends State<AccountConfiguration> {
                 final userAsyncValue = ref.watch(userProvider);
                 return userAsyncValue.when(
                   data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.name,
-                      style: const TextStyle(
-                        fontSize: 16,
+                    return GestureDetector(
+                      onTap: () => _showNameEditDialog(userResponse.name),
+                      child: Text(
+                        userResponse.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                     );
                   },
@@ -71,120 +78,58 @@ class _AccountConfiguration extends State<AccountConfiguration> {
               Navigator.pop(context);
             },
           ),
-          const Divider(),
-          ListTile(
-            title: const Text(
-              'Telefono celular',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            subtitle: Consumer(
-              builder: (context, ref, child) {
-                final userAsyncValue = ref.watch(userProvider);
-                return userAsyncValue.when(
-                  data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.phoneNumber,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el usuario"),
-                );
-              },
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text(
-              'Email',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            subtitle: Consumer(
-              builder: (context, ref, child) {
-                final userAsyncValue = ref.watch(userProvider);
-                return userAsyncValue.when(
-                  data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.email,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el usuario"),
-                );
-              },
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text(
-              'Apellido',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            subtitle:  Consumer(
-              builder: (context, ref, child) {
-                final userAsyncValue = ref.watch(userProvider);
-                return userAsyncValue.when(
-                  data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.lastname,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el usuario"),
-                );
-              },
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text(
-              'Contraseña',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            subtitle: const Text(
-              '********',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Divider(),
+          // Otros elementos de la lista...
         ],
       ),
     );
+  }
+
+  void _showNameEditDialog(String currentName) {
+    TextEditingController _nameController =
+        TextEditingController(text: currentName);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Cambiar Nombre'),
+          content: TextFormField(
+            controller: _nameController,
+            decoration: const InputDecoration(
+              labelText: 'Nuevo Nombre',
+            ),
+            onChanged: (newValue) {
+              setState(() {
+                _updateNameRequest.name = newValue;
+              });
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _updateName();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _updateName() async {
+    try {
+      await _userService.updateUser(
+          "c8d0f520-79a3-4e62-b805-af1520240165", _updateNameRequest);
+    } catch (e) {
+      print('Error al actualizar el nombre: $e');
+    }
   }
 }

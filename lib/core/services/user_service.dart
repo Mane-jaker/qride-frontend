@@ -4,6 +4,7 @@ import 'package:qride_app/core/models/login_response.dart';
 import 'package:qride_app/core/models/sing_up_request.dart';
 import 'package:qride_app/core/models/sing_up_response.dart';
 import 'package:qride_app/core/models/trip.dart';
+import 'package:qride_app/core/models/update_name_request.dart';
 import 'package:qride_app/core/models/user_response.dart';
 
 class UserService {
@@ -29,7 +30,7 @@ class UserService {
     try {
       print(request.toJson());
       final response = await _apiClient.postWithoutJwt(
-          "http://44.222.31.173:8080/api/v1/users/sing_up",
+          "http://54.221.174.112:8080/api/v1/users/sing_up",
           data: request.toJson());
 
       if (response.statusCode == 200) {
@@ -75,6 +76,25 @@ class UserService {
       }
     } catch (e) {
       throw Exception('Error al obtener la historia del usuario: $e');
+    }
+  }
+
+
+  Future<void> updateUser(String uuid, UpdateNameRequest request) async {
+    try {
+      final response = await _apiClient.put(
+        "/users/$uuid",
+        data: request.toJson(),
+      );
+
+      if (response.statusCode == 200) {
+        print("Usuario actualizado correctamente");
+      } else {
+        throw Exception(
+            'Error al actualizar el usuario: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error al actualizar el usuario: $e');
     }
   }
 }

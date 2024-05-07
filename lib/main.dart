@@ -17,7 +17,7 @@ void main() async {
   final UserService service = UserService();
 
   final LoginRequest loginRequest = LoginRequest();
-  loginRequest.email = "miguel@gmail.com";
+  loginRequest.email = "ramosproque@gmail.com";
   loginRequest.password = "12345678";
   try {
     final LoginResponse loginResponse =

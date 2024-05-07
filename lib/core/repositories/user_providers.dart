@@ -4,6 +4,6 @@ import 'package:qride_app/core/services/user_service.dart';
 
 final userProvider = FutureProvider<UserResponse>((ref) async {
   final userService = UserService();
-  const uuid = "c9e7f950-098c-4065-b5b4-2757ff3c7d23";
+  const uuid = "c8d0f520-79a3-4e62-b805-af1520240165";
   return userService.userByUUID(uuid);
 });
