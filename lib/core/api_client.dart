@@ -12,7 +12,7 @@ class ApiClient {
   }
 
   ApiClient._internal() {
-    _dio.options.connectTimeout = 100000;
+    _dio.options.connectTimeout = const Duration(milliseconds: 1000000);
 
     _dio.interceptors.add(
       InterceptorsWrapper(

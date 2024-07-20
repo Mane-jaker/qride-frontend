@@ -1,10 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qride_app/core/models/login_request.dart';
-import 'package:qride_app/core/models/login_response.dart';
-import 'package:qride_app/core/services/user_service.dart';
-import 'package:qride_app/core/utils/jwt_manager.dart';
 import 'package:qride_app/display/screens/welcome/welcome.dart';
 import 'firebase_options.dart';
 
@@ -13,21 +9,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  final UserService service = UserService();
-
-  final LoginRequest loginRequest = LoginRequest();
-  loginRequest.email = "miguel@gmail.com";
-  loginRequest.password = "12345678";
-  try {
-    final LoginResponse loginResponse =
-        await service.authenticate(loginRequest);
-    JwtManager.setJwt(loginResponse.jwtToken);
-    runApp(const ProviderScope(child: MyApp()));
-  } catch (e) {
-    print('Error durante el inicio de sesión: $e');
-    // En caso de error, puedes manejarlo como desees, por ejemplo, mostrando un mensaje al usuario o cerrando la aplicación
-  }
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

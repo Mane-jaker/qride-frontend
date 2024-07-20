@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qride_app/core/models/login_request.dart';
 import 'package:qride_app/core/models/login_response.dart';
 import 'package:qride_app/core/services/user_service.dart';
+import 'package:qride_app/core/utils/uuid_manager.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class LoginPage extends StatefulWidget {
@@ -47,6 +48,9 @@ class _LoginPageState extends State<LoginPage> {
       // Call the register method with _logInRequest
       LoginResponse response = await _userService.authenticate(_logInRequest);
       if (response.success) {
+        _userService.getUuidByEmail(_emailController.text).then((value) {
+          UUIDManager.setUuid(value);
+        });
         Navigator.push(
           context,
           MaterialPageRoute(

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qride_app/core/repositories/user_providers.dart';
+import 'package:qride_app/core/services/user_service.dart';
+import 'package:qride_app/core/utils/uuid_manager.dart';
+import 'package:qride_app/display/screens/settings/update_data.dart';
+import 'package:qride_app/display/screens/welcome/welcome.dart';
 
 class AccountConfiguration extends StatefulWidget {
   const AccountConfiguration({super.key});
@@ -10,6 +14,8 @@ class AccountConfiguration extends StatefulWidget {
 }
 
 class _AccountConfiguration extends State<AccountConfiguration> {
+  final UserService _userService = UserService();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -67,9 +73,15 @@ class _AccountConfiguration extends State<AccountConfiguration> {
                 );
               },
             ),
-            onTap: () {
-              Navigator.pop(context);
-            },
+            trailing: IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  UpdateData.route('Nombre'),
+                );
+              },
+            ),
           ),
           const Divider(),
           ListTile(
@@ -170,6 +182,62 @@ class _AccountConfiguration extends State<AccountConfiguration> {
             },
           ),
           const Divider(),
+          ListTile(
+            title: const Text(
+              'Borrar cuenta',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.redAccent,
+              ),
+            ),
+            trailing: const Icon(
+              Icons.delete_forever_rounded,
+              color: Colors.redAccent,
+            ),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Confirmar'),
+                    content: const Text(
+                        '¿Estás seguro de que quieres borrar tu cuenta?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancelar'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Confirmar'),
+                        onPressed: () async {
+                          try {
+                            final response = await _userService
+                                .deleteUserByUUID(UUIDManager.getUuid());
+                            if (response.success) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Welcome(),
+                                ),
+                              );
+                            } else {
+                              print(
+                                  'Error al actualizar el usuario: ${response.message}');
+                            }
+                          } catch (e) {
+                            print('Error al actualizar el usuario: $e');
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+          const Divider()
         ],
       ),
     );
