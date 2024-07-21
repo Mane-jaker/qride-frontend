@@ -5,78 +5,71 @@ import 'package:qride_app/display/screens/qr_scan/qr_scan.dart';
 import 'package:qride_app/display/widgets/global/app_drawer.dart';
 import 'package:qride_app/display/widgets/global/bottom_navbar.dart';
 
-class AppScaffold extends StatefulWidget {
-  const AppScaffold({Key? key}) : super(key: key);
+class AppScaffold extends StatelessWidget {
+  final Widget? floatingButton;
+  final int currentIndex;
+  final Widget body;
+  final bool showEndDrawer;
+
+  AppScaffold({
+    super.key,
+    required this.currentIndex,
+    required this.body,
+    required this.showEndDrawer,
+    this.floatingButton,
+  });
+
+  void _onItemTapped(BuildContext context, int index) {
+    if (index != currentIndex) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => _getPage(index),
+        ),
+      );
+    }
+  }
+
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return const Home();
+      case 1:
+        return const QrScan();
+      case 2:
+        return const MapRide();
+      default:
+        return const Home(); // Por defecto, regresar a la página principal
+    }
+  }
+
+  List<String> pageTitles = [
+    'Qride',
+    'Qr',
+    'Map',
+  ];
 
   @override
-  State<AppScaffold> createState() => _AppScaffoldState();
-}
-
-class _AppScaffoldState extends State<AppScaffold> {
-  int _currentPageIndex = 0;
-  late Scaffold _scaffold;
-
-  @override
-  void initState() {
-    super.initState();
-    _scaffold = _buildScaffold(true);
-  }
-
-  void _updatePageIndex(int index) {
-    setState(() {
-      _currentPageIndex = index;
-      _scaffold = _buildScaffold(true);
-    });
-  }
-
-  void _changeBodyToPage(Widget page) {
-    setState(() {
-      _scaffold = _buildScaffold(false, body: page);
-    });
-  }
-
-  Scaffold _buildScaffold(bool showEndDrawer, {Widget? body}) {
-    List<String> pageTitles = [
-      'Qride',
-      'Qr',
-      'Map',
-    ];
-
+  Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: !showEndDrawer,
       appBar: AppBar(
+        automaticallyImplyLeading: currentIndex != 0,
         title: showEndDrawer
             ? Text(
-                pageTitles[_currentPageIndex],
+                pageTitles[currentIndex],
                 style: const TextStyle(color: Colors.white),
               )
             : null,
         backgroundColor: Colors.transparent,
       ),
       endDrawer: showEndDrawer ? const AppDrawer() : null,
-      body: body ?? _buildPage(_currentPageIndex),
+      body: body,
+      floatingActionButton: floatingButton,
       bottomNavigationBar: BottomNavbar(
-        currentIndex: _currentPageIndex,
-        onTap: _updatePageIndex,
+        currentIndex: currentIndex,
+        onTap: _onItemTapped,
       ),
     );
-  }
-
-  Widget _buildPage(int index) {
-    switch (index) {
-      case 0:
-        return Home(onPlaceSelected: _changeBodyToPage);
-      case 1:
-        return const QrScan();
-      case 2:
-        return const MapRide();
-      default:
-        return const SizedBox();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _scaffold;
   }
 }

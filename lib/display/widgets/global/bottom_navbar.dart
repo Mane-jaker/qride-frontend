@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 
-class BottomNavbar extends StatefulWidget {
-  final Function(int)? onTap;
+class BottomNavbar extends StatelessWidget {
+  final Function(BuildContext, int)? onTap;
   final int currentIndex;
   const BottomNavbar(
       {super.key, required this.onTap, required this.currentIndex});
 
-  @override
-  State<BottomNavbar> createState() => _BottomNavbarState();
-}
-
-class _BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -19,7 +14,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
           // Posiciona el círculo de resaltado en la posición del ítem seleccionado
           bottom: 5,
           left: MediaQuery.of(context).size.width *
-              widget.currentIndex /
+              currentIndex /
               3, // Divide la pantalla en 3 partes iguales para obtener la posición correcta
           child: Container(
             width: MediaQuery.of(context).size.width / 3,
@@ -46,8 +41,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
               label: '',
             ),
           ],
-          currentIndex: widget.currentIndex,
-          onTap: widget.onTap,
+          currentIndex: currentIndex,
+          onTap: (index) => onTap!(context, index),
           backgroundColor: Colors.transparent,
           elevation: 0,
           showSelectedLabels: false,

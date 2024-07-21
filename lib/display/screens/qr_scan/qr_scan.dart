@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:camera/camera.dart';
+import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class QrScan extends StatefulWidget {
   const QrScan({super.key});
@@ -58,34 +59,38 @@ class _QrScanState extends State<QrScan> {
     if (!_cameraInitialized) {
       return const Center(child: CircularProgressIndicator());
     }
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          const Text(
-            'Escanea el código QR de tu parada para visualizar las rutas',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+    return AppScaffold(
+      currentIndex: 1,
+      showEndDrawer: true,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            const Text(
+              'Escanea el código QR de tu parada para visualizar las rutas',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 400,
-              child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: CameraPreview(_controller),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 400,
+                child: AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: CameraPreview(_controller),
+                ),
               ),
             ),
-          ),
-          FlashlightButton(
-            isFlashOn: _isFlashOn,
-            onPressed: _toggleFlash,
-          ),
-        ],
+            FlashlightButton(
+              isFlashOn: _isFlashOn,
+              onPressed: _toggleFlash,
+            ),
+          ],
+        ),
       ),
     );
   }

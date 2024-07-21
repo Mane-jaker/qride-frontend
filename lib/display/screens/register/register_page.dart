@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qride_app/core/models/sing_up_request.dart';
 import 'package:qride_app/core/models/sing_up_response.dart';
 import 'package:qride_app/core/services/user_service.dart';
+import 'package:qride_app/display/screens/home/home.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -61,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const AppScaffold(),
+              builder: (context) => const Home(),
             ),
           );
         }

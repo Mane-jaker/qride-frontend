@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qride_app/display/screens/home/home.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const AppScaffold(),
+          builder: (context) => const Home(),
         ),
       );
     } finally {

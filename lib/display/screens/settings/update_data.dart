@@ -4,6 +4,7 @@ import 'package:qride_app/core/models/sing_up_request.dart';
 import 'package:qride_app/core/repositories/user_providers.dart';
 import 'package:qride_app/core/services/user_service.dart';
 import 'package:qride_app/core/utils/uuid_manager.dart';
+import 'package:qride_app/display/screens/home/home.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class UpdateData extends StatefulWidget {
@@ -111,7 +112,7 @@ class _UpdateDataState extends State<UpdateData> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AppScaffold(),
+                        builder: (context) => const Home(),
                       ),
                     );
                   } else {
