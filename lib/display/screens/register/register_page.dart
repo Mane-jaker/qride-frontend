@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const AppScaffold(),
+          builder: (context) => const Home(),
         ),
       );
     } on FirebaseAuthException catch (e) {

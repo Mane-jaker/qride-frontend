@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Asegúrate de importar flutter_svg
+import 'package:qride_app/display/screens/home/home.dart';
 import 'package:qride_app/display/screens/main/log_in.dart';
 import 'package:qride_app/display/screens/register/register_page.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
@@ -42,7 +43,7 @@ class MainScreen extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                const AppScaffold(), // Reemplaza con tu página principal
+                const Home(), // Reemplaza con tu página principal
           ),
         );
       }
