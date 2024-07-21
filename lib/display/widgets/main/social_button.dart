@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:qride_app/display/screens/main/log_in.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // Asegúrate de importar flutter_svg
 
 class SocialButton extends StatelessWidget {
   final String title;
   final Color color;
-  final Icon icon;
+  final Widget icon; // Cambiado de Icon a Widget
+  final VoidCallback onPressed; // Agrega el parámetro onPressed
 
   const SocialButton({
     Key? key,
     required this.title,
     required this.color,
-    required this.icon,
+    required this.icon, // Cambiado de Icon a Widget
+    required this.onPressed, // Agrega el parámetro onPressed
   }) : super(key: key);
 
   @override
@@ -18,12 +20,7 @@ class SocialButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 14),
       child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginPage()),
-          );
-        },
+        onTap: onPressed, // Usa el parámetro onPressed
         child: Card(
           elevation: 1,
           shape: RoundedRectangleBorder(
@@ -31,21 +28,11 @@ class SocialButton extends StatelessWidget {
           ),
           color: color,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 40),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
-                    );
-                  },
-                  icon: icon,
-                  iconSize: 24,
-                ),
+                icon, // Usado directamente sin IconButton
                 const SizedBox(width: 14),
                 Text(
                   title,

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:qride_app/display/screens/settings/account_configuration.dart';
 import 'package:qride_app/display/screens/settings/activity_configuration.dart';
 
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
+
+  Future<String?> _getUserName() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.displayName;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,25 +23,31 @@ class AppDrawer extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: <Widget>[
-            const SizedBox(
-              height: 130,
-              child: DrawerHeader(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Nombre del Usuario",
-                      style: TextStyle(
-                        fontSize: 25,
-                      ),
+            FutureBuilder<String?>(
+              future: _getUserName(),
+              builder: (context, snapshot) {
+                String userName = snapshot.data ?? "Nombre del Usuario";
+                return SizedBox(
+                  height: 130,
+                  child: DrawerHeader(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          userName,
+                          style: const TextStyle(
+                            fontSize: 25,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.person,
+                          size: 30,
+                        )
+                      ],
                     ),
-                    Icon(
-                      Icons.person,
-                      size: 30,
-                    )
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.settings_rounded, size: 28),

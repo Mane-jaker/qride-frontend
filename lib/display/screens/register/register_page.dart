@@ -1,8 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:qride_app/core/models/sing_up_request.dart';
-import 'package:qride_app/core/models/sing_up_response.dart';
-import 'package:qride_app/core/services/user_service.dart';
 import 'package:qride_app/display/screens/home/home.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -17,18 +16,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final SignUpRequest _signUpRequest = SignUpRequest();
-  final UserService _userService = UserService();
-  ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController.addListener(_updateName);
-    _emailController.addListener(_updateEmail);
-    _passwordController.addListener(_updatePassword);
-  }
+  ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
 
   @override
   void dispose() {
@@ -38,37 +27,73 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  _updateName() {
-    _signUpRequest.name = _nameController.text;
-    _signUpRequest.lastname = _nameController.text;
-    _signUpRequest.phoneNumber = "9234567891";
-  }
-
-  _updateEmail() {
-    _signUpRequest.email = _emailController.text;
-  }
-
-  _updatePassword() {
-    _signUpRequest.password = _passwordController.text;
-  }
-
-  _register() async {
+  Future<void> _register() async {
     if (_formKey.currentState!.validate()) {
       _isLoading.value = true;
       try {
-        // Call the register method with _signUpRequest
-        var response = await _userService.register(_signUpRequest);
-        if (response.success) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const Home(),
-            ),
-          );
-        }
+        // Crear el usuario con correo y contraseña
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+        // Actualizar el perfil del usuario con el nombre
+        await userCredential.user
+            ?.updateProfile(displayName: _nameController.text);
+
+        // Recargar el usuario para reflejar los cambios en el perfil
+        await userCredential.user?.reload();
+        User? user = FirebaseAuth.instance.currentUser;
+
+        // Navegar a la página de inicio en caso de éxito
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Home(),
+          ),
+        );
+      } on FirebaseAuthException catch (e) {
+        // Manejar el error
+        print('Error con código: ${e.code}');
+        print(e.message);
       } finally {
         _isLoading.value = false;
       }
+    }
+  }
+
+  Future<void> _registerWithGoogle() async {
+    _isLoading.value = true;
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        _isLoading.value = false;
+        return; // El usuario canceló el inicio de sesión
+      }
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      // Navega a la página de inicio en caso de éxito
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AppScaffold(),
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      // Maneja el error
+      print('Error al iniciar sesión con Google: ${e.code}');
+      print(e.message);
+    } finally {
+      _isLoading.value = false;
     }
   }
 
@@ -194,26 +219,49 @@ class _RegisterPageState extends State<RegisterPage> {
                     builder: (context, isLoading, child) {
                       return SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: isLoading ? null : _register,
-                          style: ElevatedButton.styleFrom(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(6)),
-                            ),
-                            backgroundColor:
-                                const Color.fromRGBO(24, 101, 207, 1),
-                          ),
-                          child: isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white)
-                              : const Text(
-                                  'Registrarse',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                  ),
+                        child: Column(
+                          children: [
+                            ElevatedButton(
+                              onPressed: isLoading ? null : _register,
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6)),
                                 ),
+                                backgroundColor:
+                                    const Color.fromRGBO(24, 101, 207, 1),
+                              ),
+                              child: isLoading
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white)
+                                  : const Text(
+                                      'Registrarse',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                              onPressed: isLoading ? null : _registerWithGoogle,
+                              style: ElevatedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6)),
+                                ),
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                              ),
+                              child: const Text(
+                                'Registrarse con Google',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },

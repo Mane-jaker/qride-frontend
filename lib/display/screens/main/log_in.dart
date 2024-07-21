@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qride_app/display/screens/home/home.dart';
-import 'package:qride_app/display/widgets/global/app_scaffold.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,15 +37,32 @@ class _LoginPageState extends State<LoginPage> {
     // Lógica eliminada
   }
 
-  _login() async {
+  Future<void> _login() async {
     _isLoading.value = true;
     try {
-      // Lógica eliminada
-      Navigator.push(
+      final email = _emailController.text;
+      final password = _passwordController.text;
+
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Navega a la página de inicio en caso de éxito
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const Home(),
         ),
+      );
+    } on FirebaseAuthException catch (e) {
+      // Maneja el error
+      print('Error al iniciar sesión: ${e.code}');
+      print(e.message);
+      // Puedes mostrar un mensaje de error al usuario aquí
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.message}')),
       );
     } finally {
       _isLoading.value = false;
@@ -163,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? const CircularProgressIndicator(
                                 color: Colors.white)
                             : const Text(
-                                'Iniciar Sesion',
+                                'Iniciar Sesión',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15,
