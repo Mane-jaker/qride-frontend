@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qride_app/core/models/login_request.dart';
-import 'package:qride_app/core/models/login_response.dart';
-import 'package:qride_app/core/services/user_service.dart';
-import 'package:qride_app/core/utils/uuid_manager.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,8 +12,6 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final LoginRequest _logInRequest = LoginRequest();
-  final UserService _userService = UserService();
   ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
 
   @override
@@ -35,29 +29,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _updateEmail() {
-    _logInRequest.email = _emailController.text;
+    // Lógica eliminada
   }
 
   _updatePassword() {
-    _logInRequest.password = _passwordController.text;
+    // Lógica eliminada
   }
 
-  _register() async {
+  _login() async {
     _isLoading.value = true;
     try {
-      // Call the register method with _logInRequest
-      LoginResponse response = await _userService.authenticate(_logInRequest);
-      if (response.success) {
-        _userService.getUuidByEmail(_emailController.text).then((value) {
-          UUIDManager.setUuid(value);
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AppScaffold(),
-          ),
-        );
-      }
+      // Lógica eliminada
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AppScaffold(),
+        ),
+      );
     } finally {
       _isLoading.value = false;
     }
@@ -162,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                     return SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: isLoading ? null : _register,
+                        onPressed: isLoading ? null : _login,
                         style: ElevatedButton.styleFrom(
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(6)),

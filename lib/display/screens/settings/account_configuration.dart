@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qride_app/core/repositories/user_providers.dart';
 import 'package:qride_app/core/services/user_service.dart';
 import 'package:qride_app/core/utils/uuid_manager.dart';
 import 'package:qride_app/display/screens/settings/update_data.dart';
@@ -18,9 +16,11 @@ class _AccountConfiguration extends State<AccountConfiguration> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      width: double.infinity,
-      child: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Configuración de la cuenta'),
+      ),
+      body: ListView(
         padding:
             const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
         children: <Widget>[
@@ -54,24 +54,11 @@ class _AccountConfiguration extends State<AccountConfiguration> {
                 fontSize: 18,
               ),
             ),
-            subtitle: Consumer(
-              builder: (context, ref, child) {
-                final userAsyncValue = ref.watch(userProvider);
-                return userAsyncValue.when(
-                  data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el usuario"),
-                );
-              },
+            subtitle: const Text(
+              'Juan Pérez',
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
             trailing: IconButton(
               icon: const Icon(Icons.edit),
@@ -86,29 +73,16 @@ class _AccountConfiguration extends State<AccountConfiguration> {
           const Divider(),
           ListTile(
             title: const Text(
-              'Telefono celular',
+              'Teléfono celular',
               style: TextStyle(
                 fontSize: 18,
               ),
             ),
-            subtitle: Consumer(
-              builder: (context, ref, child) {
-                final userAsyncValue = ref.watch(userProvider);
-                return userAsyncValue.when(
-                  data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.phoneNumber,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el usuario"),
-                );
-              },
+            subtitle: const Text(
+              '+123 456 7890',
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -122,24 +96,11 @@ class _AccountConfiguration extends State<AccountConfiguration> {
                 fontSize: 18,
               ),
             ),
-            subtitle: Consumer(
-              builder: (context, ref, child) {
-                final userAsyncValue = ref.watch(userProvider);
-                return userAsyncValue.when(
-                  data: (userResponse) {
-                    // Aquí puedes usar userResponse para mostrar los datos del usuario
-                    return Text(
-                      userResponse.email,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    );
-                  },
-                  loading: () => const CircularProgressIndicator(),
-                  error: (error, stackTrace) =>
-                      const Text("Error al obtener el usuario"),
-                );
-              },
+            subtitle: const Text(
+              'juan.perez@example.com',
+              style: TextStyle(
+                fontSize: 16,
+              ),
             ),
             onTap: () {
               Navigator.pop(context);
@@ -224,10 +185,10 @@ class _AccountConfiguration extends State<AccountConfiguration> {
                               );
                             } else {
                               print(
-                                  'Error al actualizar el usuario: ${response.message}');
+                                  'Error al borrar el usuario: ${response.message}');
                             }
                           } catch (e) {
-                            print('Error al actualizar el usuario: $e');
+                            print('Error al borrar el usuario: $e');
                           }
                         },
                       ),

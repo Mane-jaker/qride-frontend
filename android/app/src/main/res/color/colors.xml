@@ -1,0 +1,4 @@
+<!-- colors.xml -->
+<resources>
+    <color name="colorAccent">#FF4081</color> <!-- Color de acento predeterminado -->
+</resources>
