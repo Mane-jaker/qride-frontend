@@ -83,8 +83,8 @@ class _RegisterPageState extends State<RegisterPage> {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // Navega a la página de inicio en caso de éxito
-      Navigator.push(
+      // Navegar a la página de inicio en caso de éxito
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const Home(),
