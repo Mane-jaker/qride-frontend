@@ -16,6 +16,9 @@ class MainScreen extends StatelessWidget {
     final FirebaseAuth auth = FirebaseAuth.instance;
 
     try {
+      // Desconectar cualquier cuenta previa
+      await googleSignIn.signOut();
+
       // Iniciar sesión con Google
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {

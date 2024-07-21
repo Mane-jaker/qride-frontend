@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:qride_app/display/screens/home/home.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:qride_app/display/widgets/global/app_scaffold.dart';
+import 'package:qride_app/display/screens/home/home.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -31,22 +30,17 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       _isLoading.value = true;
       try {
-        // Crear el usuario con correo y contraseña
         UserCredential userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
 
-        // Actualizar el perfil del usuario con el nombre
         await userCredential.user
             ?.updateProfile(displayName: _nameController.text);
-
-        // Recargar el usuario para reflejar los cambios en el perfil
         await userCredential.user?.reload();
         User? user = FirebaseAuth.instance.currentUser;
 
-        // Navegar a la página de inicio en caso de éxito
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -54,7 +48,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         );
       } on FirebaseAuthException catch (e) {
-        // Manejar el error
         print('Error con código: ${e.code}');
         print(e.message);
       } finally {
@@ -66,11 +59,19 @@ class _RegisterPageState extends State<RegisterPage> {
   Future<void> _registerWithGoogle() async {
     _isLoading.value = true;
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      // Desconectar cualquier cuenta previa
+      await googleSignIn.signOut();
+
+      // Iniciar el flujo de inicio de sesión
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
       if (googleUser == null) {
         _isLoading.value = false;
         return; // El usuario canceló el inicio de sesión
       }
+
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
 
@@ -81,6 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
+
       // Navega a la página de inicio en caso de éxito
       Navigator.push(
         context,
