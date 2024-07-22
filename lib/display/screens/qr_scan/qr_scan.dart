@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:camera/camera.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qride_app/display/widgets/global/app_scaffold.dart';
+import '../map/map_ride.dart';
 
 class QrScan extends StatefulWidget {
   const QrScan({super.key});
@@ -11,37 +13,72 @@ class QrScan extends StatefulWidget {
 }
 
 class _QrScanState extends State<QrScan> {
-  late CameraController _controller;
-  bool _cameraInitialized = false;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? _controller;
   bool _isFlashOn = false; // Estado del flash
 
   @override
-  void initState() {
-    super.initState();
-    _initializeCamera();
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
   }
 
-  Future<void> _initializeCamera() async {
-    final cameraPermissionStatus = await Permission.camera.request();
-    if (cameraPermissionStatus.isGranted) {
-      final cameras = await availableCameras();
-      _controller = CameraController(cameras[0], ResolutionPreset.medium);
-      await _controller.initialize();
-      if (mounted) {
-        setState(() {
-          _cameraInitialized = true;
-        });
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      _controller = controller;
+    });
+
+    controller.scannedDataStream.listen((scanData) {
+      if (scanData.code != null) {
+        // Detener el escaneo
+        _controller?.pauseCamera();
+
+        // Redirigir a la vista MapRide
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapRide(
+              lineRoute: _getRoutePoints(),
+              route: "Ruta A-01",
+              time: "Llega en 10 min",
+            ),
+          ),
+        );
       }
-    } else {
-      // Si los permisos de la cámara no se conceden, puedes mostrar un mensaje o realizar alguna acción adicional
-    }
+    });
+  }
+
+  List<RoutePoint> _getRoutePoints() {
+    return [
+      RoutePoint(const LatLng(16.757241, -93.162630), 'Start Point'),
+      RoutePoint(const LatLng(16.755858, -93.156377), 'Point'),
+      RoutePoint(const LatLng(16.755017, -93.142335), 'Point'),
+      RoutePoint(const LatLng(16.754116, -93.132078), 'Point'),
+      RoutePoint(const LatLng(16.754686, -93.129108), 'Point'),
+      RoutePoint(const LatLng(16.754899, -93.127775), 'Point'),
+      RoutePoint(const LatLng(16.754853, -93.127386), 'Point'),
+      RoutePoint(const LatLng(16.754970, -93.125638), 'Point'),
+      RoutePoint(const LatLng(16.754962, -93.124634), 'Point'),
+      RoutePoint(const LatLng(16.753612, -93.116411), 'Point'),
+      RoutePoint(const LatLng(16.752230, -93.107410), 'Point'),
+      RoutePoint(const LatLng(16.752129, -93.106921), 'Point'),
+      RoutePoint(const LatLng(16.751330, -93.101850), 'Point'),
+      RoutePoint(const LatLng(16.747510, -93.084268), 'Point'),
+      RoutePoint(const LatLng(16.747303, -93.083437), 'Point'),
+      RoutePoint(const LatLng(16.747209, -93.083270), 'Point'),
+      RoutePoint(const LatLng(16.747258, -93.083069), 'Point'),
+      RoutePoint(const LatLng(16.747116, -93.082102), 'Point'),
+      RoutePoint(const LatLng(16.746381, -93.077999), 'Point'),
+      RoutePoint(const LatLng(16.745867, -93.076640), 'Point'),
+      RoutePoint(const LatLng(16.744931, -93.075140), 'End Point'),
+    ];
   }
 
   Future<void> _toggleFlash() async {
     if (_isFlashOn) {
-      await _controller.setFlashMode(FlashMode.off);
+      await _controller?.toggleFlash();
     } else {
-      await _controller.setFlashMode(FlashMode.torch);
+      await _controller?.toggleFlash();
     }
     setState(() {
       _isFlashOn = !_isFlashOn;
@@ -49,16 +86,7 @@ class _QrScanState extends State<QrScan> {
   }
 
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (!_cameraInitialized) {
-      return const Center(child: CircularProgressIndicator());
-    }
     return AppScaffold(
       currentIndex: 1,
       showEndDrawer: true,
@@ -75,14 +103,10 @@ class _QrScanState extends State<QrScan> {
               ),
               textAlign: TextAlign.center,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 400,
-                child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: CameraPreview(_controller),
-                ),
+            Expanded(
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
               ),
             ),
             FlashlightButton(
